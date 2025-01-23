@@ -21,7 +21,44 @@ class Graph:
         * If there is an end node input and a path does not exist, return None
 
         """
-        return
+
+        # Created with aid by ChatGPT
+
+        if self.graph is None or len(self.graph) == 0:
+            raise ValueError("The graph is empty.")
+        if start not in self.graph:
+            raise ValueError(f"Start node '{start}' is not in the graph.")
+        if end and end not in self.graph:
+            raise ValueError(f"End node '{end}' is not in the graph.")
+
+        # Queue for BFS traversal
+        queue = [start]
+        visited = [start]
+        parent = {start: None}  # For reconstructing the path
+
+        while queue:
+            current = queue.pop(0)
+
+            # If we are looking for a path and found the end node
+            if end and current == end:
+                path = []
+                while current:
+                    path.append(current)
+                    current = parent[current]
+                return path[::-1]  # Return the reversed path
+
+            for neighbor in self.graph[current]:
+                if neighbor not in visited:                    
+                    queue.append(neighbor)
+                    visited.append(neighbor)
+                    parent[neighbor] = current
+
+        # If an end node was provided but not reached, return None
+        if end:
+            return None
+
+        # If no end node was provided, return the BFS traversal order
+        return visited
 
 
 
